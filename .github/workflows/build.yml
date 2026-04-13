@@ -48,4 +48,4 @@ jobs:
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         git add mtd4.new.bin
         git commit -m "Update mtd4.new.bin" || echo "No changes to commit"
-        git push --no-verify
+        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main --no-verify
