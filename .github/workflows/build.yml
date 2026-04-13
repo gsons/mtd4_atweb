@@ -1,0 +1,46 @@
+name: Build SquashFS
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install squashfs-tools
+      run: sudo apt-get update && sudo apt-get install -y squashfs-tools
+
+    - name: Run unpack.sh to extract mtd4
+      run: |
+        chmod +x unpack.sh
+        ./unpack.sh
+
+    - name: Copy files to squashfs-root
+      run: |
+        mkdir -p squashfs-root/sbin
+        mkdir -p squashfs-root/web
+        cp temp/atweb squashfs-root/sbin/
+        cp temp/at.html squashfs-root/web/
+
+    - name: Add startup commands to rc
+      run: |
+        echo "sleep 20" >> squashfs-root/etc/rc
+        echo "/sbin/atweb &" >> squashfs-root/etc/rc
+
+    - name: Run pack.sh to rebuild
+      run: |
+        chmod +x pack.sh
+        ./pack.sh
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mtd4-new
+        path: mtd4.new.bin
