@@ -42,10 +42,12 @@ jobs:
         chmod +x pack.sh
         ./pack.sh
 
-    - name: Commit generated file
+      # 提交运行时文件
+    - name: Commit and Push Changes
       run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add mtd4.new.bin
-        git commit -m "Update mtd4.new.bin" || echo "No changes to commit"
-        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main --no-verify
+        git config --local user.email "qq976955017@gmail.com"
+        git config --local user.name "gsonhub"
+        git add .
+        git commit -m "订阅更新于$(TZ='Asia/Shanghai'  date '+%Y-%m-%d %H:%M:%S')"
+        git push
+
