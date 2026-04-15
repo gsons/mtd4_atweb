@@ -42,12 +42,8 @@ jobs:
         chmod +x pack.sh
         ./pack.sh
 
-      # 提交运行时文件
-    - name: Commit and Push Changes
-      run: |
-        git config --local user.email "qq976955017@gmail.com"
-        git config --local user.name "gsonhub"
-        git add .
-        git commit -m "订阅更新于$(TZ='Asia/Shanghai'  date '+%Y-%m-%d %H:%M:%S')"
-        git push
-
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mtd4-new
+        path: mtd4.new.bin
