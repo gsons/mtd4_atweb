@@ -23,9 +23,9 @@ jobs:
     - name: Copy files to squashfs-root
       run: |
         mkdir -p squashfs-root/sbin
-        mkdir -p squashfs-root/web
+        mkdir -p squashfs-root/etc_ro/web
         cp temp/atweb squashfs-root/sbin/
-        cp temp/at.html squashfs-root/web/
+        cp temp/at.html squashfs-root/etc_ro/web/
 
     - name: Modify rc file
       run: |
