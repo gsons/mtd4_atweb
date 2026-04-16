@@ -27,12 +27,16 @@ jobs:
         cp temp/atweb squashfs-root/sbin/
         cp temp/at.html squashfs-root/web/
 
-    - name: Add startup commands to rc
+    - name: Modify rc file
       run: |
-        chmod +w squashfs-root/etc/rc
-        if ! grep -q "/sbin/atweb" squashfs-root/etc/rc; then
-          echo "sleep 20" >> squashfs-root/etc/rc
-          echo "/sbin/atweb &" >> squashfs-root/etc/rc
+        if [ ! -f "squashfs-root/etc/rc_fix" ]; then
+          cp squashfs-root/etc/rc squashfs-root/etc/rc_fix
+        fi
+        sed -i 's|sysinit:/etc/rc|sysinit:/etc/rc_fix|g' squashfs-root/etc/inittab
+        chmod +w squashfs-root/etc/rc_fix
+        if ! grep -q "/sbin/atweb" squashfs-root/etc/rc_fix; then
+          echo "sleep 20" >> squashfs-root/etc/rc_fix
+          echo "/sbin/atweb &" >> squashfs-root/etc/rc_fix
         fi
 
     - name: Run pack.sh to rebuild
