@@ -1,0 +1,31 @@
+name: Pack SquashFS
+
+on:
+  push:
+    branches: [ pack ]
+
+jobs:
+  pack:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install squashfs-tools
+      run: sudo apt-get update && sudo apt-get install -y squashfs-tools
+
+    - name: Extract squashfs-root.zip
+      run: |
+        unzip squashfs-root.zip
+
+    - name: Run pack.sh to rebuild
+      run: |
+        chmod +x pack.sh
+        ./pack.sh
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mtd4-new
+        path: mtd4.new.bin
